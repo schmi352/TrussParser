@@ -1,5 +1,5 @@
 Timestamp,Address,ZIP,FullName,FooDuration,BarDuration,TotalDuration,Notes
-4/1/11 11:00:00 AM,"123 4th St, Anywhere, AA",94121,Monkey Alberto,1:23:32.123,1:32:33.123,zzsasdfa,I am the very model of a modern major general
+4/1/11 11:00:00 AM,"123 4th St, Anywhere, AA",94121,Monkey Albertoà,1:23:32.123,1:32:33.123,zzsasdfa,I am the very model of a modern major general
 3/12/14 12:00:00 AM,"Somewhere Else, In Another Time, BB",1,Superman übertan,111:23:32.123,1:32:33.123,zzsasdfa,This is some Unicode right here. ü ¡! 😀
 2/29/16 12:11:11 PM,111 Ste. #123123123,1101,Résumé Ron,31:23:32.123,1:32:33.123,zzsasdfa,🏳️🏴🏳️🏴
 1/1/11 12:00:01 AM,"This Is Not An Address, BusyTown, BT",94121,Mary 1,1:23:32.123,0:00:00.000,zzsasdfa,I like Emoji! 🍏🍎😍

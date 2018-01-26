@@ -16,7 +16,7 @@ class CSVParser(object):
            # Need to detach stdin to decode in utf-8
            sys.stdin = sys.stdin.detach()   
            for line in sys.stdin:
-               line = line.decode("utf-8", "surrogateescape")
+               line = line.decode("utf-8", "replace")
                # Regex will look at each comma
                # if it's surrounded by ", will not split on that comma
                self.data.append(re.split(',(?=(?:[^"]*\"[^"]*\")*[^"]*$)',line))
@@ -28,7 +28,7 @@ class CSVParser(object):
     # If there an invalid character, escape/write it in unicode.
     def WriteFile(self):
         for line in self.data:
-            line = ",".join(line).encode("utf-8", "surrogateescape")
+            line = ",".join(line).encode("utf-8", "replace")
             sys.stdout.buffer.write(line)
 
     # Imports the Time as Pacific, then converts to Eastern
@@ -42,14 +42,15 @@ class CSVParser(object):
             pacific = pytz.timezone('US/Pacific-New')
             datept = pacific.localize(date)
             dateet = datept.astimezone(eastern)
-            return dateet.strftime("%Y/%m/%d %H:%M:%S")
+            return dateet.strftime("%Y-%m-%dT%H:%M:%S")
         except ValueError as e:
             sys.stderr.write("DateTime could not be parsed correctly")
             return ''
 
     # Makes sure Zip is 5 characters, if not, just add 0s to beginning. 
     def UpdateZip(self, zipcode):
-        if(zipcode == 'ZIP'):
+        # Todo: Make sure Zip is an actual number, not just some random string
+        if(zipcode.upper() == 'ZIP'):
             return zipcode
         return '{:0>5}'.format(zipcode)
 
@@ -67,20 +68,24 @@ class CSVParser(object):
     def UpdateTotalDuration(self, total, time1, time2):
         if (total == 'TotalDuration'):
             return total
+        while(time1.count(':') < 2):
+            time1 = "0:" + time1
+        while(time2.count(':') < 2):
+            time2 = "0:" + time2
+        
         firsttime = time1.split(':')
         secondtime = time2.split(':')
-
         finaltime = [0,0,0.0]
         
         finaltime[2] = float(firsttime[2]) + float(secondtime[2])
         if (finaltime[2] >= 60):
-            finaltime[1] + 1
-            finaltime[2] - 60
+            finaltime[1] += 1
+            finaltime[2] -= 60
 
         finaltime[1] += int(firsttime[1]) + int(secondtime[1])
         if (finaltime[1] >= 60):
-            finaltime[0] + 1
-            finaltime[1] - 60
+            finaltime[0] += 1
+            finaltime[1] -= 60
 
         finaltime[0] += int(firsttime[0]) + int(secondtime[0])
         return str(finaltime[0]) + ':' + str(finaltime[1]) + ':' + str(finaltime[2])
